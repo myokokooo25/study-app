@@ -56,11 +56,14 @@ export async function createStudyRoom(input: {
       .single();
 
     if (!error && room) {
-      await supabase.from('study_room_members').insert({
+      const { error: memberInsertError } = await supabase.from('study_room_members').insert({
         room_id: room.id,
         user_id: input.userId,
         display_name: input.displayName,
       });
+      if (memberInsertError) {
+        throw new Error(memberInsertError.message);
+      }
       return room as StudyRoom;
     }
   }
@@ -89,17 +92,25 @@ export async function joinStudyRoomByCode(input: {
     throw new Error('Room not found. Check the code and try again.');
   }
 
-  const { error: memberError } = await supabase.from('study_room_members').upsert(
-    {
-      room_id: room.id,
-      user_id: input.userId,
-      display_name: input.displayName,
-    },
-    { onConflict: 'room_id,user_id' },
-  );
+  const { error: memberError } = await supabase.from('study_room_members').insert({
+    room_id: room.id,
+    user_id: input.userId,
+    display_name: input.displayName,
+  });
 
   if (memberError) {
-    throw memberError;
+    if (memberError.code === '23505') {
+      const { error: updateError } = await supabase
+        .from('study_room_members')
+        .update({ display_name: input.displayName })
+        .eq('room_id', room.id)
+        .eq('user_id', input.userId);
+      if (updateError) {
+        throw new Error(updateError.message);
+      }
+    } else {
+      throw new Error(memberError.message);
+    }
   }
 
   return room as StudyRoom;
