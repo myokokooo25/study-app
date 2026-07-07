@@ -31,8 +31,28 @@
   padding: 0.55rem 0.75rem;
 }
 
+.ui-mode-toggle.to-classic {
+  border-color: #e8c547;
+  background: #fff9e6;
+  color: #7a5d00;
+}
+
+.ui-mode-toggle.to-premium {
+  border-color: #b8860b;
+}
+
 .ui-mode-toggle-icon {
   color: #b8860b;
+}
+
+.auth-success {
+  margin: 0;
+  padding: 0.75rem;
+  border-radius: 0.85rem;
+  background: #ecfdf3;
+  border: 2px solid #86efac;
+  color: #166534;
+  font-weight: 700;
 }
 
 .home-banner-actions {
@@ -548,6 +568,16 @@
   color: var(--premium-muted);
 }
 
+.premium-ui-switch-fab {
+  display: none;
+}
+
+.premium-topbar-right .ui-mode-toggle.to-classic {
+  border-color: rgba(232, 197, 71, 0.55);
+  background: rgba(232, 197, 71, 0.14);
+  color: var(--premium-gold);
+}
+
 .premium-quiz-wrap .quiz-shell {
   background: var(--premium-bg-soft);
 }
@@ -606,6 +636,26 @@
 
   .premium-topbar {
     flex-direction: column;
+  }
+
+  .premium-ui-switch-fab {
+    display: block;
+    position: fixed;
+    right: 0.85rem;
+    bottom: calc(5.5rem + env(safe-area-inset-bottom));
+    z-index: 35;
+  }
+
+  .premium-ui-switch-fab .ui-mode-toggle {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    border-color: rgba(232, 197, 71, 0.55);
+    background: rgba(18, 26, 39, 0.95);
+    color: var(--premium-gold);
+    padding: 0.65rem 0.95rem;
+  }
+
+  .premium-topbar-right .ui-mode-toggle {
+    display: none;
   }
 }
 

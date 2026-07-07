@@ -16,6 +16,11 @@ import {
   type UserDeviceRow,
 } from '../lib/supabase';
 
+export interface SignUpResult {
+  error: string | null;
+  needsEmailConfirm: boolean;
+}
+
 type AuthPhase = 'loading' | 'signed_out' | 'device_limit' | 'ready';
 
 interface AuthContextValue {
@@ -28,7 +33,7 @@ interface AuthContextValue {
     password: string,
     displayName: string,
     captchaToken?: string,
-  ) => Promise<string | null>;
+  ) => Promise<SignUpResult>;
   signIn: (email: string, password: string, captchaToken?: string) => Promise<string | null>;
   signOut: () => Promise<void>;
   refreshDeviceAccess: () => Promise<string | null>;
@@ -151,10 +156,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     password: string,
     displayName: string,
     captchaToken?: string,
-  ) => {
+  ): Promise<SignUpResult> => {
     const supabase = getSupabaseClient();
     if (!supabase) {
-      return 'Supabase is not configured.';
+      return { error: 'Supabase is not configured.', needsEmailConfirm: false };
     }
 
     const { data, error } = await supabase.auth.signUp({
@@ -165,18 +170,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           display_name: displayName,
         },
         captchaToken,
+        emailRedirectTo: window.location.origin + window.location.pathname,
       },
     });
 
     if (error) {
-      return error.message;
+      return { error: error.message, needsEmailConfirm: false };
     }
 
     if (!data.session) {
-      return 'Account created. Please check your email to confirm, then sign in.';
+      return { error: null, needsEmailConfirm: true };
     }
 
-    return null;
+    return { error: null, needsEmailConfirm: false };
   }, []);
 
   const signIn = useCallback(async (email: string, password: string, captchaToken?: string) => {

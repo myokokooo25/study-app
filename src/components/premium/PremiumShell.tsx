@@ -89,6 +89,7 @@ export function PremiumShell({
             <h1>{navItems.find((item) => item.id === section)?.label ?? 'Home'}</h1>
           </div>
           <div className="premium-topbar-right">
+            <UiModeToggle uiMode={uiMode} onChange={setUiMode} />
             <span className="premium-chip">{user.email}</span>
             <span className="premium-chip accent">🔥 {stats.streak}</span>
             <span className="premium-chip accent">⚡ {stats.totalXp}</span>
@@ -141,6 +142,10 @@ export function PremiumShell({
           </button>
         ))}
       </nav>
+
+      <div className="premium-ui-switch-fab">
+        <UiModeToggle uiMode={uiMode} onChange={setUiMode} />
+      </div>
     </div>
   );
 }

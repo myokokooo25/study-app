@@ -19,6 +19,23 @@ function getCaptchaProvider(): CaptchaProvider {
   return 'none';
 }
 
+function friendlyAuthError(message: string, mode: AuthMode) {
+  const lower = message.toLowerCase();
+  if (lower.includes('captcha')) {
+    return 'Supabase CAPTCHA is still ON. Turn it OFF in Supabase Dashboard → Authentication → Bot and Abuse Protection.';
+  }
+  if (lower.includes('already registered') || lower.includes('already been registered')) {
+    return 'This email is already registered. Please use Sign In instead.';
+  }
+  if (lower.includes('email not confirmed')) {
+    return 'Please confirm your email first, then use Sign In.';
+  }
+  if (lower.includes('invalid login credentials') && mode === 'sign_in') {
+    return 'Email or password is wrong. If you just signed up, confirm your email first.';
+  }
+  return message;
+}
+
 export function AuthPage() {
   const { signIn, signUp } = useAuth();
   const turnstileRef = useRef<TurnstileInstance | null>(null);
@@ -29,7 +46,8 @@ export function AuthPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
-  const [message, setMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const resetCaptcha = () => {
@@ -40,7 +58,8 @@ export function AuthPage() {
 
   const switchMode = (nextMode: AuthMode) => {
     setMode(nextMode);
-    setMessage(null);
+    setErrorMessage(null);
+    setSuccessMessage(null);
     resetCaptcha();
   };
 
@@ -48,22 +67,45 @@ export function AuthPage() {
     event.preventDefault();
 
     if (captchaProvider !== 'none' && !captchaToken) {
-      setMessage('Please complete the CAPTCHA challenge first.');
+      setErrorMessage('Please complete the CAPTCHA challenge first.');
+      setSuccessMessage(null);
       return;
     }
 
     setLoading(true);
-    setMessage(null);
+    setErrorMessage(null);
+    setSuccessMessage(null);
 
-    const errorMessage =
-      mode === 'sign_up'
-        ? await signUp(email.trim(), password, displayName.trim(), captchaToken ?? undefined)
-        : await signIn(email.trim(), password, captchaToken ?? undefined);
+    if (mode === 'sign_up') {
+      const result = await signUp(email.trim(), password, displayName.trim(), captchaToken ?? undefined);
+      setLoading(false);
 
+      if (result.error) {
+        setErrorMessage(friendlyAuthError(result.error, 'sign_up'));
+        resetCaptcha();
+        return;
+      }
+
+      if (result.needsEmailConfirm) {
+        setSuccessMessage(
+          'Account created. Check your email inbox (and spam folder), click the confirm link, then Sign In.',
+        );
+        setMode('sign_in');
+        setPassword('');
+        resetCaptcha();
+        return;
+      }
+
+      setSuccessMessage('Account created successfully. You are now signed in.');
+      resetCaptcha();
+      return;
+    }
+
+    const signInError = await signIn(email.trim(), password, captchaToken ?? undefined);
     setLoading(false);
 
-    if (errorMessage) {
-      setMessage(errorMessage);
+    if (signInError) {
+      setErrorMessage(friendlyAuthError(signInError, 'sign_in'));
       resetCaptcha();
       return;
     }
@@ -161,7 +203,8 @@ export function AuthPage() {
             </div>
           )}
 
-          {message && <p className="auth-message">{message}</p>}
+          {successMessage && <p className="auth-success">{successMessage}</p>}
+          {errorMessage && <p className="auth-message">{errorMessage}</p>}
 
           <button type="submit" className="duo-btn primary" disabled={submitDisabled}>
             {loading ? 'Please wait...' : mode === 'sign_up' ? 'CREATE ACCOUNT' : 'SIGN IN'}

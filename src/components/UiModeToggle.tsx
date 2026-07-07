@@ -8,17 +8,18 @@ interface Props {
 
 export function UiModeToggle({ uiMode, onChange, compact = false }: Props) {
   const next = uiMode === 'classic' ? 'premium' : 'classic';
+  const goingClassic = uiMode === 'premium';
 
   return (
     <button
       type="button"
-      className={`ui-mode-toggle ${compact ? 'compact' : ''}`}
+      className={`ui-mode-toggle ${compact ? 'compact' : ''} ${goingClassic ? 'to-classic' : 'to-premium'}`}
       onClick={() => onChange(next)}
-      title={next === 'premium' ? 'Switch to Premium UI' : 'Switch to Classic UI'}
+      title={goingClassic ? 'Switch to Classic UI' : 'Switch to Premium UI'}
     >
-      <span className="ui-mode-toggle-icon">{uiMode === 'premium' ? '✦' : '◆'}</span>
+      <span className="ui-mode-toggle-icon">{uiMode === 'premium' ? '◆' : '✦'}</span>
       <span className="ui-mode-toggle-label">
-        {uiMode === 'premium' ? 'Classic' : 'Premium'}
+        {goingClassic ? 'Classic UI' : 'Premium UI'}
       </span>
     </button>
   );
