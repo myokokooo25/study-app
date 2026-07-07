@@ -78,7 +78,7 @@ export interface StudyRecord {
   sessions: StudySession[];
 }
 
-export type AppTab = 'learn' | 'vocab' | 'together' | 'record';
+export type AppTab = 'learn' | 'vocab' | 'record';
 
 export type UiMode = 'classic' | 'premium';
 

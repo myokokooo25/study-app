@@ -531,33 +531,6 @@
   border: 1px solid var(--premium-card-border);
 }
 
-.premium-app .together-page.embedded,
-.premium-app .together-room {
-  color: var(--premium-text);
-}
-
-.premium-app .together-lobby-card,
-.premium-app .together-call-panel,
-.premium-app .together-members,
-.premium-app .together-chat {
-  background: var(--premium-card);
-  border-color: var(--premium-card-border);
-}
-
-.premium-app .together-lobby-card input,
-.premium-app .together-chat-form input,
-.premium-app .together-control,
-.premium-app .together-member-chip,
-.premium-app .together-chat-item {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: var(--premium-card-border);
-  color: var(--premium-text);
-}
-
-.premium-app .together-chat-item.mine {
-  background: var(--premium-gold-soft);
-}
-
 .premium-app .confirm-dialog {
   background: var(--premium-card);
   border-color: var(--premium-card-border);

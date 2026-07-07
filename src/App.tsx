@@ -6,7 +6,6 @@ import { DeviceLimitPage } from './components/DeviceLimitPage';
 import { HomePage } from './components/HomePage';
 import { QuizPage } from './components/QuizPage';
 import { RecordPage } from './components/RecordPage';
-import { StudyTogetherPage } from './components/StudyTogetherPage';
 import { VocabularyPage } from './components/VocabularyPage';
 import { UiModeToggle } from './components/UiModeToggle';
 import { PremiumShell } from './components/premium/PremiumShell';
@@ -148,8 +147,6 @@ function AppContent() {
             userEmail={user?.email ?? ''}
             onRequestSignOut={requestSignOut}
           />
-        ) : tab === 'together' && user ? (
-          <StudyTogetherPage user={user} />
         ) : (
           <RecordPage
             record={record}

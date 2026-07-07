@@ -2,7 +2,6 @@ import { useState } from 'react';
 import type { User } from '@supabase/supabase-js';
 import type { AppTab, LanguageMode, StudyRecord, UiMode } from '../../types';
 import { UiModeToggle } from '../UiModeToggle';
-import { StudyTogetherPage } from '../StudyTogetherPage';
 import { VocabularyPage } from '../VocabularyPage';
 import { PremiumDashboard } from './PremiumDashboard';
 import { PremiumLearn } from './PremiumLearn';
@@ -26,7 +25,6 @@ const navItems: { id: PremiumSection; label: string; icon: string }[] = [
   { id: 'home', label: 'Home', icon: '⌂' },
   { id: 'learn', label: '問題', icon: '✎' },
   { id: 'vocab', label: '単語', icon: '文' },
-  { id: 'together', label: 'Group', icon: '👥' },
   { id: 'record', label: '記録', icon: '◔' },
 ];
 
@@ -121,9 +119,6 @@ export function PremiumShell({
               onRequestSignOut={onRequestSignOut}
               embedded
             />
-          )}
-          {section === 'together' && (
-            <StudyTogetherPage user={user} embedded />
           )}
           {section === 'record' && <PremiumRecord record={record} stats={stats} />}
         </main>
