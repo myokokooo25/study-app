@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import type { User } from '@supabase/supabase-js';
 import type { AppTab, LanguageMode, StudyRecord, UiMode } from '../../types';
 import { UiModeToggle } from '../UiModeToggle';
+import { StudyTogetherPage } from '../StudyTogetherPage';
 import { VocabularyPage } from '../VocabularyPage';
 import { PremiumDashboard } from './PremiumDashboard';
 import { PremiumLearn } from './PremiumLearn';
@@ -11,12 +13,12 @@ type PremiumSection = 'home' | AppTab;
 interface Props {
   uiMode: UiMode;
   setUiMode: (mode: UiMode) => void;
+  user: User;
   record: StudyRecord;
   stats: ReturnType<typeof import('../../studyRecord').getOverallStats>;
   language: LanguageMode;
   setLanguage: (mode: LanguageMode) => void;
-  userEmail: string;
-  onSignOut: () => Promise<void>;
+  onRequestSignOut: () => void;
   onSelectQuestion: (chapterId: number, serial: number) => void;
 }
 
@@ -24,18 +26,19 @@ const navItems: { id: PremiumSection; label: string; icon: string }[] = [
   { id: 'home', label: 'Home', icon: '⌂' },
   { id: 'learn', label: '問題', icon: '✎' },
   { id: 'vocab', label: '単語', icon: '文' },
+  { id: 'together', label: 'Group', icon: '👥' },
   { id: 'record', label: '記録', icon: '◔' },
 ];
 
 export function PremiumShell({
   uiMode,
   setUiMode,
+  user,
   record,
   stats,
   language,
   setLanguage,
-  userEmail,
-  onSignOut,
+  onRequestSignOut,
   onSelectQuestion,
 }: Props) {
   const [section, setSection] = useState<PremiumSection>('home');
@@ -73,7 +76,7 @@ export function PremiumShell({
 
         <div className="premium-sidebar-foot">
           <UiModeToggle uiMode={uiMode} onChange={setUiMode} compact />
-          <button type="button" className="premium-signout" onClick={() => void onSignOut()}>
+          <button type="button" className="premium-signout" onClick={onRequestSignOut}>
             Sign out
           </button>
         </div>
@@ -86,7 +89,7 @@ export function PremiumShell({
             <h1>{navItems.find((item) => item.id === section)?.label ?? 'Home'}</h1>
           </div>
           <div className="premium-topbar-right">
-            <span className="premium-chip">{userEmail}</span>
+            <span className="premium-chip">{user.email}</span>
             <span className="premium-chip accent">🔥 {stats.streak}</span>
             <span className="premium-chip accent">⚡ {stats.totalXp}</span>
           </div>
@@ -113,10 +116,13 @@ export function PremiumShell({
             <VocabularyPage
               language={language}
               setLanguage={setLanguage}
-              userEmail={userEmail}
-              onSignOut={onSignOut}
+              userEmail={user.email ?? ''}
+              onRequestSignOut={onRequestSignOut}
               embedded
             />
+          )}
+          {section === 'together' && (
+            <StudyTogetherPage user={user} embedded />
           )}
           {section === 'record' && <PremiumRecord record={record} stats={stats} />}
         </main>

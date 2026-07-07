@@ -14,7 +14,7 @@ interface Props {
   language: LanguageMode;
   setLanguage: (mode: LanguageMode) => void;
   userEmail: string;
-  onSignOut: () => Promise<void>;
+  onRequestSignOut: () => void;
   embedded?: boolean;
 }
 
@@ -77,7 +77,7 @@ function buildQuiz(learnedWords: VocabularyWord[]): QuizQuestion[] {
   });
 }
 
-export function VocabularyPage({ language, setLanguage, userEmail, onSignOut, embedded = false }: Props) {
+export function VocabularyPage({ language, setLanguage, userEmail, onRequestSignOut, embedded = false }: Props) {
   const { progress, learnedSet, toggleLearned, markDayWord, learnedCount } =
     useVocabProgress();
   const [mode, setMode] = useState<VocabMode>('cards');
@@ -149,7 +149,7 @@ export function VocabularyPage({ language, setLanguage, userEmail, onSignOut, em
               {learnedCount}/{vocabularyData.length}
             </strong>
           </div>
-          <button type="button" className="text-link sign-out-link" onClick={() => void onSignOut()}>
+          <button type="button" className="text-link sign-out-link" onClick={onRequestSignOut}>
             Sign out
           </button>
         </header>

@@ -9,10 +9,10 @@ interface Props {
   setLanguage: (mode: LanguageMode) => void;
   stats: ReturnType<typeof import('../studyRecord').getOverallStats>;
   userEmail: string;
-  onSignOut: () => Promise<void>;
+  onRequestSignOut: () => void;
 }
 
-export function RecordPage({ record, language, setLanguage, stats, userEmail, onSignOut }: Props) {
+export function RecordPage({ record, language, setLanguage, stats, userEmail, onRequestSignOut }: Props) {
   const recentDays = getRecentDailyRecords(record, 7);
   const maxDaily = Math.max(...recentDays.map((day) => day.questionsAnswered), 1);
 
@@ -22,7 +22,7 @@ export function RecordPage({ record, language, setLanguage, stats, userEmail, on
         <div>
           <p className="eyebrow">Study Record</p>
           <h1>လေ့ကျင့်မှတ်တမ်း</h1>
-          <button type="button" className="text-link account-link" onClick={() => void onSignOut()}>
+          <button type="button" className="text-link account-link" onClick={onRequestSignOut}>
             {userEmail} · Sign out
           </button>
         </div>

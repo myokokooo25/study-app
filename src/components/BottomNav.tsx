@@ -26,6 +26,14 @@ export function BottomNav({ activeTab, onChange }: Props) {
       </button>
       <button
         type="button"
+        className={activeTab === 'together' ? 'active' : ''}
+        onClick={() => onChange('together')}
+      >
+        <span className="nav-icon">👥</span>
+        <span>Group</span>
+      </button>
+      <button
+        type="button"
         className={activeTab === 'record' ? 'active' : ''}
         onClick={() => onChange('record')}
       >

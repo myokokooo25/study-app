@@ -16,7 +16,7 @@ interface Props {
     todayAnswered: number;
   };
   userEmail: string;
-  onSignOut: () => Promise<void>;
+  onRequestSignOut: () => void;
   uiMode: UiMode;
   setUiMode: (mode: UiMode) => void;
   onSelectQuestion: (chapterId: number, serial: number) => void;
@@ -30,7 +30,7 @@ export function HomePage({
   record,
   stats,
   userEmail,
-  onSignOut,
+  onRequestSignOut,
   uiMode,
   setUiMode,
   onSelectQuestion,
@@ -60,7 +60,7 @@ export function HomePage({
           <strong>{stats.todayAnswered}</strong>
         </div>
         </div>
-        <button type="button" className="text-link sign-out-link" onClick={() => void onSignOut()}>
+        <button type="button" className="text-link sign-out-link" onClick={onRequestSignOut}>
           Sign out
         </button>
       </header>

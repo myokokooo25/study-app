@@ -1,8 +1,12 @@
 import { useState } from 'react';
 import { useAuth } from '../auth/AuthContext';
 
-export function DeviceLimitPage() {
-  const { devices, deviceId, removeDevice, refreshDeviceAccess, signOut } = useAuth();
+interface Props {
+  onRequestSignOut: () => void;
+}
+
+export function DeviceLimitPage({ onRequestSignOut }: Props) {
+  const { devices, deviceId, removeDevice, refreshDeviceAccess } = useAuth();
   const [message, setMessage] = useState<string | null>(
     'Device limit reached. This account can only use 3 devices. Remove one old device to continue.',
   );
@@ -63,7 +67,7 @@ export function DeviceLimitPage() {
           <button type="button" className="duo-btn primary" onClick={handleRetry}>
             TRY AGAIN
           </button>
-          <button type="button" className="text-link" onClick={signOut}>
+          <button type="button" className="text-link" onClick={onRequestSignOut}>
             Sign out
           </button>
         </div>
