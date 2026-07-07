@@ -39,7 +39,6 @@ export function QuizPage({
   const [currentIndex, setCurrentIndex] = useState(startIndex);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [checked, setChecked] = useState(false);
-  const [celebrate, setCelebrate] = useState(false);
 
   if (!chapter || chapterQuestions.length === 0) {
     return (
@@ -52,31 +51,24 @@ export function QuizPage({
 
   const current = chapterQuestions[currentIndex];
   const question = current.question;
-  const questionRecord = record.questions[question.id];
-  const isAnswered = Boolean(questionRecord);
-  const savedAnswer = questionRecord?.selectedId ?? null;
-  const activeSelection = selectedId ?? savedAnswer ?? null;
-  const isCorrect = activeSelection === question.correctOptionId;
+  const activeSelection = selectedId;
+  const isCorrect = checked && activeSelection === question.correctOptionId;
   const progressPercent = Math.round(((currentIndex + 1) / chapterQuestions.length) * 100);
   const serialNumber = current.serial;
 
-  const syncQuestionState = (index: number) => {
-    const target = chapterQuestions[index];
-    const answered = record.questions[target.question.id];
+  const goToQuestion = (index: number) => {
     setCurrentIndex(index);
-    setSelectedId(answered?.selectedId ?? null);
-    setChecked(Boolean(answered));
-    setCelebrate(false);
+    setSelectedId(null);
+    setChecked(false);
   };
 
   const handleCheck = () => {
-    if (activeSelection === null || checked || isAnswered) {
+    if (activeSelection === null || checked) {
       return;
     }
 
     const correct = activeSelection === question.correctOptionId;
     setChecked(true);
-    setCelebrate(correct);
     onSubmitAnswer({
       questionId: question.id,
       partId: current.partId,
@@ -89,7 +81,7 @@ export function QuizPage({
 
   const handleContinue = () => {
     if (currentIndex < chapterQuestions.length - 1) {
-      syncQuestionState(currentIndex + 1);
+      goToQuestion(currentIndex + 1);
       return;
     }
 
@@ -99,10 +91,7 @@ export function QuizPage({
   const handleReset = () => {
     if (window.confirm('Chapter progress reset လုပ်မလား?')) {
       onResetChapter(chapterId);
-      setCurrentIndex(0);
-      setSelectedId(null);
-      setChecked(false);
-      setCelebrate(false);
+      goToQuestion(0);
     }
   };
 
@@ -137,7 +126,7 @@ export function QuizPage({
         <div className="options-list">
           {question.options.map((option) => {
             let state = '';
-            if (checked || isAnswered) {
+            if (checked) {
               if (option.id === question.correctOptionId) {
                 state = 'correct';
               } else if (option.id === activeSelection) {
@@ -153,12 +142,12 @@ export function QuizPage({
                 type="button"
                 className={`option-card ${state}`.trim()}
                 onClick={() => {
-                  if (checked || isAnswered) {
+                  if (checked) {
                     return;
                   }
                   setSelectedId(option.id);
                 }}
-                disabled={checked || isAnswered}
+                disabled={checked}
               >
                 <span className="option-number">{option.id}</span>
                 <TextBlock
@@ -171,8 +160,8 @@ export function QuizPage({
           })}
         </div>
 
-        {(checked || isAnswered) && (
-          <section className={`feedback-panel ${isCorrect ? 'correct' : 'wrong'} ${celebrate ? 'celebrate' : ''}`}>
+        {checked && (
+          <section className={`feedback-panel ${isCorrect ? 'correct' : 'wrong'}`}>
             <div className="feedback-header">
               <strong>{isCorrect ? '🎉 Excellent!' : '😅 Incorrect'}</strong>
               <span>Answer: ({question.correctOptionId})</span>
@@ -201,7 +190,7 @@ export function QuizPage({
                 ]
                   .filter(Boolean)
                   .join(' ')}
-                onClick={() => syncQuestionState(index)}
+                onClick={() => goToQuestion(index)}
                 aria-label={`Question ${item.serial}`}
               >
                 {answered && correct ? '✓' : item.serial}
@@ -216,7 +205,7 @@ export function QuizPage({
       </main>
 
       <footer className="quiz-action-bar">
-        {!checked && !isAnswered ? (
+        {!checked ? (
           <button
             type="button"
             className="duo-btn primary"

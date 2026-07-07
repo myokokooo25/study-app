@@ -458,6 +458,12 @@ button {
   background: #ddf4ff;
 }
 
+.question-number-btn.answered {
+  border-color: #cbd5e1;
+  background: #f1f5f9;
+  color: var(--duo-gray-dark);
+}
+
 .question-number-btn.correct {
   border-color: var(--duo-green);
   background: #d7ffb8;
@@ -661,7 +667,7 @@ button {
   right: 0;
   bottom: 0;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   background: white;
   border-top: 2px solid var(--duo-border);
   padding: 0.5rem 0 calc(0.5rem + env(safe-area-inset-bottom));
@@ -801,6 +807,11 @@ button {
 .option-card.selected {
   border-color: var(--duo-blue);
   background: #ddf4ff;
+}
+
+.option-card.answered {
+  border-color: #cbd5e1;
+  background: #f8fafc;
 }
 
 .option-card.correct {
