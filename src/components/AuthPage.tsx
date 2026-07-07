@@ -76,7 +76,7 @@ export function AuthPage() {
   return (
     <div className="auth-shell">
       <div className="auth-card">
-        <p className="eyebrow">2026 Exam Prep</p>
+        <p className="eyebrow">鉄骨製作管理技術者試験</p>
         <h1>{mode === 'sign_up' ? 'Sign Up' : 'Sign In'}</h1>
         <p className="subtitle">
           Account 1 ခုလျှင် device 3 ခုသာ အသုံးပြုနိုင်ပါသည်။

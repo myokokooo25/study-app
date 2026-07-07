@@ -290,12 +290,13 @@ button {
 
 .chapter-toc-item {
   display: flex;
-  align-items: baseline;
-  gap: 0.35rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
   width: 100%;
   border: 0;
   background: transparent;
-  padding: 0.35rem 0.25rem;
+  padding: 0.45rem 0.25rem;
   text-align: left;
   font: inherit;
   color: var(--duo-text);
@@ -310,21 +311,8 @@ button {
   background: color-mix(in srgb, var(--tab-color, var(--duo-green)) 12%, white);
 }
 
-.chapter-toc-number {
-  font-weight: 900;
-  min-width: 1.35rem;
-}
-
 .chapter-toc-title {
   font-weight: 800;
-  white-space: nowrap;
-}
-
-.chapter-toc-dots {
-  flex: 1;
-  border-bottom: 2px dotted var(--duo-border);
-  min-width: 1rem;
-  margin: 0 0.15rem 0.2rem;
 }
 
 .chapter-toc-progress {

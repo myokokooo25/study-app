@@ -61,9 +61,7 @@ export function HomePage({
 
       <section className="home-banner">
         <div>
-          <p className="eyebrow">2026 Exam Prep</p>
-          <h1>鉄骨工事 問題集</h1>
-          <p className="subtitle">သံမဏိတည်ဆောက်ရေး စာမေးပွဲ</p>
+          <h1>鉄骨製作管理技術者試験</h1>
         </div>
         <LanguageToggle language={language} setLanguage={setLanguage} />
       </section>
@@ -82,11 +80,9 @@ export function HomePage({
               style={{ ['--tab-color' as string]: tabColor }}
               onClick={() => setActiveChapterId(chapter.id)}
             >
-              <span className="chapter-toc-number">{chapter.id}.</span>
               <span className="chapter-toc-title">
-                {language === 'my' ? chapter.titleMY : chapter.titleJP}
+                Chapter{chapter.id}. {chapter.titleJP}
               </span>
-              <span className="chapter-toc-dots" aria-hidden="true" />
               {statsForTab.answered > 0 && (
                 <span className="chapter-toc-progress">{statsForTab.percent}%</span>
               )}
@@ -98,7 +94,7 @@ export function HomePage({
       <main className="chapter-panel" style={{ ['--chapter-color' as string]: color }}>
         <div className="chapter-panel-header">
           <span className="chapter-badge" style={{ background: color }}>
-            {activeChapter.id}. {language === 'my' ? activeChapter.titleMY : activeChapter.titleJP}
+            Chapter{activeChapter.id}. {activeChapter.titleJP}
           </span>
           <div className="chapter-panel-meta">
             <span>{chapterStats.answered}/{chapterStats.total} answered</span>
