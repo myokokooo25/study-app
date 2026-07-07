@@ -18,6 +18,14 @@ export function BottomNav({ activeTab, onChange }: Props) {
       </button>
       <button
         type="button"
+        className={activeTab === 'vocab' ? 'active' : ''}
+        onClick={() => onChange('vocab')}
+      >
+        <span className="nav-icon">📚</span>
+        <span>Vocab</span>
+      </button>
+      <button
+        type="button"
         className={activeTab === 'record' ? 'active' : ''}
         onClick={() => onChange('record')}
       >

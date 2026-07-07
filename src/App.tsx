@@ -5,6 +5,7 @@ import { DeviceLimitPage } from './components/DeviceLimitPage';
 import { HomePage } from './components/HomePage';
 import { QuizPage } from './components/QuizPage';
 import { RecordPage } from './components/RecordPage';
+import { VocabularyPage } from './components/VocabularyPage';
 import { useAuth } from './auth/AuthContext';
 import { useStudyRecord } from './studyRecord';
 import { useLanguageMode } from './utils';
@@ -71,6 +72,13 @@ function AppContent() {
           onSelectQuestion={(chapterId, serial) =>
             setView({ type: 'quiz', chapterId, startIndex: serial - 1 })
           }
+        />
+      ) : tab === 'vocab' ? (
+        <VocabularyPage
+          language={language}
+          setLanguage={setLanguage}
+          userEmail={user?.email ?? ''}
+          onSignOut={signOut}
         />
       ) : (
         <RecordPage

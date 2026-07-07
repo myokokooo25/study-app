@@ -78,4 +78,18 @@ export interface StudyRecord {
   sessions: StudySession[];
 }
 
-export type AppTab = 'learn' | 'record';
+export type AppTab = 'learn' | 'vocab' | 'record';
+
+export interface VocabularyWord {
+  id: number;
+  category: string;
+  kanji: string;
+  reading: string;
+  english: string;
+  burmese: string;
+}
+
+export interface VocabProgress {
+  learnedIds: number[];
+  dayProgress: Record<number, number[]>;
+}
