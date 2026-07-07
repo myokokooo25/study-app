@@ -1,7 +1,11 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL ?? '';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY ?? '';
+// Public client keys — safe in frontend when RLS is enabled.
+const supabaseUrl =
+  import.meta.env.VITE_SUPABASE_URL ?? 'https://kdulrcovfiqbsenevowc.supabase.co';
+const supabaseAnonKey =
+  import.meta.env.VITE_SUPABASE_ANON_KEY ??
+  'sb_publishable_zdo0Etwvkd70Nnv2-sePng_ZM0r-Pon';
 
 export const isSupabaseConfigured =
   supabaseUrl.length > 0 && supabaseAnonKey.length > 0;
