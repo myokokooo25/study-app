@@ -3,6 +3,8 @@ import { chapters, getChapterQuestions, totalQuestionCount } from '../data';
 import type { LanguageMode, StudyRecord } from '../types';
 import { getChapterStats } from '../studyRecord';
 import { LanguageToggle } from './LanguageToggle';
+import { UiModeToggle } from './UiModeToggle';
+import type { UiMode } from '../types';
 
 interface Props {
   language: LanguageMode;
@@ -15,6 +17,8 @@ interface Props {
   };
   userEmail: string;
   onSignOut: () => Promise<void>;
+  uiMode: UiMode;
+  setUiMode: (mode: UiMode) => void;
   onSelectQuestion: (chapterId: number, serial: number) => void;
 }
 
@@ -27,6 +31,8 @@ export function HomePage({
   stats,
   userEmail,
   onSignOut,
+  uiMode,
+  setUiMode,
   onSelectQuestion,
 }: Props) {
   const [activeChapterId, setActiveChapterId] = useState(chapters[0]?.id ?? 1);
@@ -63,7 +69,10 @@ export function HomePage({
         <div>
           <h1>鉄骨製作管理技術者試験</h1>
         </div>
-        <LanguageToggle language={language} setLanguage={setLanguage} />
+        <div className="home-banner-actions">
+          <UiModeToggle uiMode={uiMode} onChange={setUiMode} />
+          <LanguageToggle language={language} setLanguage={setLanguage} />
+        </div>
       </section>
 
       <nav className="chapter-toc" aria-label="Chapters">

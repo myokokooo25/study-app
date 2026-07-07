@@ -6,11 +6,15 @@ import { HomePage } from './components/HomePage';
 import { QuizPage } from './components/QuizPage';
 import { RecordPage } from './components/RecordPage';
 import { VocabularyPage } from './components/VocabularyPage';
+import { UiModeToggle } from './components/UiModeToggle';
+import { PremiumShell } from './components/premium/PremiumShell';
 import { useAuth } from './auth/AuthContext';
 import { useStudyRecord } from './studyRecord';
 import { useLanguageMode } from './utils';
+import { useUiMode } from './hooks/useUiMode';
 import type { AppTab } from './types';
 import './App.css';
+import './premium.css';
 
 type View =
   | { type: 'tabs' }
@@ -19,6 +23,7 @@ type View =
 function AppContent() {
   const { user, phase, signOut } = useAuth();
   const { language, setLanguage } = useLanguageMode();
+  const { uiMode, setUiMode } = useUiMode();
   const { record, submitAnswer, resetChapter, stats, cloudReady } = useStudyRecord(
     user?.id ?? null,
   );
@@ -46,21 +51,46 @@ function AppContent() {
 
   if (view.type === 'quiz') {
     return (
-      <QuizPage
-        chapterId={view.chapterId}
-        startIndex={view.startIndex}
-        language={language}
+      <div className={uiMode === 'premium' ? 'premium-quiz-wrap' : undefined}>
+        <QuizPage
+          chapterId={view.chapterId}
+          startIndex={view.startIndex}
+          language={language}
+          record={record}
+          stats={stats}
+          onSubmitAnswer={submitAnswer}
+          onResetChapter={resetChapter}
+          onBack={() => setView({ type: 'tabs' })}
+        />
+      </div>
+    );
+  }
+
+  if (uiMode === 'premium') {
+    return (
+      <PremiumShell
+        uiMode={uiMode}
+        setUiMode={setUiMode}
         record={record}
         stats={stats}
-        onSubmitAnswer={submitAnswer}
-        onResetChapter={resetChapter}
-        onBack={() => setView({ type: 'tabs' })}
+        language={language}
+        setLanguage={setLanguage}
+        userEmail={user?.email ?? ''}
+        onSignOut={signOut}
+        onSelectQuestion={(chapterId, serial) =>
+          setView({ type: 'quiz', chapterId, startIndex: serial - 1 })
+        }
       />
     );
   }
 
   return (
     <div className="app-shell">
+      {tab !== 'learn' && (
+        <div className="classic-floating-toggle">
+          <UiModeToggle uiMode={uiMode} onChange={setUiMode} />
+        </div>
+      )}
       {tab === 'learn' ? (
         <HomePage
           language={language}
@@ -69,6 +99,8 @@ function AppContent() {
           stats={stats}
           userEmail={user?.email ?? ''}
           onSignOut={signOut}
+          uiMode={uiMode}
+          setUiMode={setUiMode}
           onSelectQuestion={(chapterId, serial) =>
             setView({ type: 'quiz', chapterId, startIndex: serial - 1 })
           }

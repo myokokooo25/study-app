@@ -15,6 +15,7 @@ interface Props {
   setLanguage: (mode: LanguageMode) => void;
   userEmail: string;
   onSignOut: () => Promise<void>;
+  embedded?: boolean;
 }
 
 const categories = [...new Set(vocabularyData.map((w) => w.category))];
@@ -76,7 +77,7 @@ function buildQuiz(learnedWords: VocabularyWord[]): QuizQuestion[] {
   });
 }
 
-export function VocabularyPage({ language, setLanguage, userEmail, onSignOut }: Props) {
+export function VocabularyPage({ language, setLanguage, userEmail, onSignOut, embedded = false }: Props) {
   const { progress, learnedSet, toggleLearned, markDayWord, learnedCount } =
     useVocabProgress();
   const [mode, setMode] = useState<VocabMode>('cards');
@@ -138,28 +139,32 @@ export function VocabularyPage({ language, setLanguage, userEmail, onSignOut }: 
   };
 
   return (
-    <div className="page vocab-page">
-      <header className="duo-topbar home-topbar">
-        <div className="account-chip">{userEmail}</div>
-        <div className="duo-stat-pill xp-pill">
-          <span>📚</span>
-          <strong>
-            {learnedCount}/{vocabularyData.length}
-          </strong>
-        </div>
-        <button type="button" className="text-link sign-out-link" onClick={() => void onSignOut()}>
-          Sign out
-        </button>
-      </header>
+    <div className={`page vocab-page ${embedded ? 'vocab-embedded' : ''}`}>
+      {!embedded && (
+        <header className="duo-topbar home-topbar">
+          <div className="account-chip">{userEmail}</div>
+          <div className="duo-stat-pill xp-pill">
+            <span>📚</span>
+            <strong>
+              {learnedCount}/{vocabularyData.length}
+            </strong>
+          </div>
+          <button type="button" className="text-link sign-out-link" onClick={() => void onSignOut()}>
+            Sign out
+          </button>
+        </header>
+      )}
 
-      <section className="home-banner">
-        <div>
-          <p className="eyebrow">Vocabulary</p>
-          <h1>単語 Flashcards</h1>
-          <p className="subtitle">သံမဏိတည်ဆောက်ရေး စကားလုံး {vocabularyData.length} ခု</p>
-        </div>
-        <LanguageToggle language={language} setLanguage={setLanguage} />
-      </section>
+      {!embedded && (
+        <section className="home-banner">
+          <div>
+            <p className="eyebrow">Vocabulary</p>
+            <h1>単語 Flashcards</h1>
+            <p className="subtitle">သံမဏိတည်ဆောက်ရေး စကားလုံး {vocabularyData.length} ခု</p>
+          </div>
+          <LanguageToggle language={language} setLanguage={setLanguage} />
+        </section>
+      )}
 
       <nav className="vocab-mode-tabs" aria-label="Vocabulary modes">
         {(

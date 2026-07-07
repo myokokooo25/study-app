@@ -80,6 +80,8 @@ export interface StudyRecord {
 
 export type AppTab = 'learn' | 'vocab' | 'record';
 
+export type UiMode = 'classic' | 'premium';
+
 export interface VocabularyWord {
   id: number;
   category: string;
