@@ -1,12 +1,18 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { AuthProvider } from './auth/AuthContext';
+import { AuthProvider, isSupabaseConfigured } from './auth/AuthContext';
+import { SetupRequiredPage } from './components/SetupRequiredPage';
 import App from './App';
+import './App.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <AuthProvider>
-      <App />
-    </AuthProvider>
+    {!isSupabaseConfigured ? (
+      <SetupRequiredPage />
+    ) : (
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    )}
   </StrictMode>,
 );

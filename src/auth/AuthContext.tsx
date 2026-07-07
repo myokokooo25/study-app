@@ -10,7 +10,8 @@ import {
 import type { User } from '@supabase/supabase-js';
 import { getDeviceId, getDeviceLabel } from './deviceId';
 import {
-  supabase,
+  getSupabaseClient,
+  isSupabaseConfigured,
   type RegisterDeviceResult,
   type UserDeviceRow,
 } from '../lib/supabase';
@@ -37,6 +38,11 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 async function registerCurrentDevice(): Promise<RegisterDeviceResult> {
+  const supabase = getSupabaseClient();
+  if (!supabase) {
+    throw new Error('Supabase is not configured.');
+  }
+
   const { data, error } = await supabase.rpc('register_device', {
     p_device_id: getDeviceId(),
     p_device_name: getDeviceLabel(),
@@ -51,6 +57,11 @@ async function registerCurrentDevice(): Promise<RegisterDeviceResult> {
 }
 
 async function loadDevices() {
+  const supabase = getSupabaseClient();
+  if (!supabase) {
+    return [];
+  }
+
   const { data, error } = await supabase
     .from('user_devices')
     .select('id, device_id, device_name, user_agent, last_seen_at, created_at')
@@ -88,6 +99,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const bootstrapSession = useCallback(async (nextUser: User | null) => {
+    const supabase = getSupabaseClient();
     setUser(nextUser);
 
     if (!nextUser) {
@@ -103,12 +115,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     if (errorMessage) {
       setPhase('signed_out');
-      await supabase.auth.signOut();
+      await supabase?.auth.signOut();
       setUser(null);
     }
   }, [refreshDeviceAccess]);
 
   useEffect(() => {
+    const supabase = getSupabaseClient();
+    if (!supabase) {
+      setPhase('signed_out');
+      return;
+    }
+
     let mounted = true;
 
     supabase.auth.getSession().then(({ data }) => {
@@ -134,6 +152,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     displayName: string,
     captchaToken?: string,
   ) => {
+    const supabase = getSupabaseClient();
+    if (!supabase) {
+      return 'Supabase is not configured.';
+    }
+
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -157,6 +180,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signIn = useCallback(async (email: string, password: string, captchaToken?: string) => {
+    const supabase = getSupabaseClient();
+    if (!supabase) {
+      return 'Supabase is not configured.';
+    }
+
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -166,13 +194,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signOut = useCallback(async () => {
-    await supabase.auth.signOut();
+    const supabase = getSupabaseClient();
+    await supabase?.auth.signOut();
     setUser(null);
     setDevices([]);
     setPhase('signed_out');
   }, []);
 
   const removeDevice = useCallback(async (targetDeviceId: string) => {
+    const supabase = getSupabaseClient();
+    if (!supabase) {
+      return 'Supabase is not configured.';
+    }
+
     const { data, error } = await supabase.rpc('remove_user_device', {
       p_device_id: targetDeviceId,
     });
@@ -213,3 +247,5 @@ export function useAuth() {
   }
   return context;
 }
+
+export { isSupabaseConfigured };
