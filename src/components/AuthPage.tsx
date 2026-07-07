@@ -161,15 +161,6 @@ export function AuthPage() {
             </div>
           )}
 
-          {captchaProvider === 'none' && (
-            <p className="auth-message">
-              Supabase CAPTCHA is enabled, but this app has no site key yet.
-              Add `VITE_TURNSTILE_SITE_KEY` or `VITE_HCAPTCHA_SITE_KEY` to `.env`
-              (must match Supabase Dashboard provider), or disable CAPTCHA in
-              Supabase Dashboard → Authentication → Bot and Abuse Protection.
-            </p>
-          )}
-
           {message && <p className="auth-message">{message}</p>}
 
           <button type="submit" className="duo-btn primary" disabled={submitDisabled}>
