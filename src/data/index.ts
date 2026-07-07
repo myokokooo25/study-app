@@ -21,8 +21,8 @@ import { chapter5Data2026Part1 } from './chapters/chapter5-2026-part1';
 export const chapters: Chapter[] = [
   {
     id: 1,
-    titleJP: '静力学・構造力学',
-    titleMY: 'Statics & Structural Mechanics',
+    titleJP: '鉄骨構造',
+    titleMY: 'သံမဏိတည်ဆောက်ပုံ',
     parts: [
       { id: '1-1', titleJP: 'Part 1', titleMY: 'အပိုင်း ၁', questions: chapter1Data2026Part1 },
       { id: '1-2', titleJP: 'Part 2', titleMY: 'အပိုင်း ၂', questions: chapter1Data2026Part2 },
@@ -32,8 +32,8 @@ export const chapters: Chapter[] = [
   },
   {
     id: 2,
-    titleJP: 'JASS 6（鉄骨工事）',
-    titleMY: 'JASS 6 (သံမဏိတည်ဆောက်ရေး)',
+    titleJP: '鉄骨加工',
+    titleMY: 'သံမဏိပြုလုပ်ခြင်း',
     parts: [
       { id: '2-1', titleJP: 'Part 1', titleMY: 'အပိုင်း ၁', questions: chapter2Data2026Part1 },
       { id: '2-2', titleJP: 'Part 2', titleMY: 'အပိုင်း ၂', questions: chapter2Data2026Part2 },
@@ -43,8 +43,8 @@ export const chapters: Chapter[] = [
   },
   {
     id: 3,
-    titleJP: '鉄骨工事の品質管理',
-    titleMY: 'သံမဏိတည်ဆောက်ရေး QM',
+    titleJP: '品質管理',
+    titleMY: 'အရည်အသွေးထိန်းချုပ်မှု',
     parts: [
       { id: '3-1', titleJP: 'Part 1', titleMY: 'အပိုင်း ၁', questions: chapter3Data2026Part1 },
       { id: '3-2', titleJP: 'Part 2', titleMY: 'အပိုင်း ၂', questions: chapter3Data2026Part2 },
@@ -55,15 +55,15 @@ export const chapters: Chapter[] = [
   {
     id: 4,
     titleJP: '安全衛生',
-    titleMY: 'လုပ်ငန်းခွင်ဘေးကင်းရေး',
+    titleMY: 'လုပ်ငန်းခွင်ဘေးကင်းရေးနှင့် ကျန်းမာရေး',
     parts: [
       { id: '4-1', titleJP: 'Part 1', titleMY: 'အပိုင်း ၁', questions: chapter4Data2026Part1 },
     ],
   },
   {
     id: 5,
-    titleJP: '建築基準法',
-    titleMY: 'ဆောက်လုပ်ရေးစံနှုန်းဥပဒေ',
+    titleJP: '建築法規',
+    titleMY: 'ဆောက်လုပ်ရေးဥပဒေနှင့် စည်းမျဉ်း',
     parts: [
       { id: '5-1', titleJP: 'Part 1', titleMY: 'အပိုင်း ၁', questions: chapter5Data2026Part1 },
     ],

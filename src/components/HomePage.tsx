@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { chapters, getChapterQuestions, totalQuestionCount } from '../data';
 import type { LanguageMode, StudyRecord } from '../types';
 import { getChapterStats } from '../studyRecord';
-import { LanguageToggle, TextBlock } from './LanguageToggle';
+import { LanguageToggle } from './LanguageToggle';
 
 interface Props {
   language: LanguageMode;
@@ -68,7 +68,7 @@ export function HomePage({
         <LanguageToggle language={language} setLanguage={setLanguage} />
       </section>
 
-      <nav className="chapter-tabs" aria-label="Chapters">
+      <nav className="chapter-toc" aria-label="Chapters">
         {chapters.map((chapter, chapterIndex) => {
           const statsForTab = getChapterStats(record, chapter.id);
           const tabColor = chapterColors[chapterIndex % chapterColors.length];
@@ -78,16 +78,17 @@ export function HomePage({
             <button
               key={chapter.id}
               type="button"
-              className={`chapter-tab ${isActive ? 'active' : ''}`}
+              className={`chapter-toc-item ${isActive ? 'active' : ''}`}
               style={{ ['--tab-color' as string]: tabColor }}
               onClick={() => setActiveChapterId(chapter.id)}
             >
-              <span className="chapter-tab-number">{chapter.id}</span>
-              <span className="chapter-tab-label">Ch.{chapter.id}</span>
+              <span className="chapter-toc-number">{chapter.id}.</span>
+              <span className="chapter-toc-title">
+                {language === 'my' ? chapter.titleMY : chapter.titleJP}
+              </span>
+              <span className="chapter-toc-dots" aria-hidden="true" />
               {statsForTab.answered > 0 && (
-                <span className="chapter-tab-progress">
-                  {statsForTab.percent}%
-                </span>
+                <span className="chapter-toc-progress">{statsForTab.percent}%</span>
               )}
             </button>
           );
@@ -97,14 +98,8 @@ export function HomePage({
       <main className="chapter-panel" style={{ ['--chapter-color' as string]: color }}>
         <div className="chapter-panel-header">
           <span className="chapter-badge" style={{ background: color }}>
-            Chapter {activeChapter.id}
+            {activeChapter.id}. {language === 'my' ? activeChapter.titleMY : activeChapter.titleJP}
           </span>
-          <TextBlock
-            language={language}
-            jp={activeChapter.titleJP}
-            my={activeChapter.titleMY}
-            className="path-title"
-          />
           <div className="chapter-panel-meta">
             <span>{chapterStats.answered}/{chapterStats.total} answered</span>
             <span>{chapterStats.percent}% complete</span>

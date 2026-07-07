@@ -278,6 +278,62 @@ button {
   margin-bottom: 1rem;
 }
 
+.chapter-toc {
+  display: grid;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+  padding: 0.85rem 1rem;
+  border: 2px solid var(--duo-border);
+  border-radius: 1rem;
+  background: white;
+}
+
+.chapter-toc-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 0.35rem 0.25rem;
+  text-align: left;
+  font: inherit;
+  color: var(--duo-text);
+  border-radius: 0.5rem;
+}
+
+.chapter-toc-item:hover {
+  background: var(--duo-soft);
+}
+
+.chapter-toc-item.active {
+  background: color-mix(in srgb, var(--tab-color, var(--duo-green)) 12%, white);
+}
+
+.chapter-toc-number {
+  font-weight: 900;
+  min-width: 1.35rem;
+}
+
+.chapter-toc-title {
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.chapter-toc-dots {
+  flex: 1;
+  border-bottom: 2px dotted var(--duo-border);
+  min-width: 1rem;
+  margin: 0 0.15rem 0.2rem;
+}
+
+.chapter-toc-progress {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--duo-green-dark);
+  white-space: nowrap;
+}
+
 .chapter-tab {
   display: grid;
   justify-items: center;
